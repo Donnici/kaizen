@@ -47,6 +47,8 @@ describe('POST /auth/sign-up', () => {
 			AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
 			AppFeature.FINANCIAL_VARIABLE_EXPENSE_READ,
 			AppFeature.FINANCIAL_VARIABLE_EXPENSE_WRITE,
+			AppFeature.FINANCIAL_FIXED_INCOME_READ,
+			AppFeature.FINANCIAL_FIXED_INCOME_WRITE,
 		],
 		createdAt: new Date('2026-04-19T00:00:00.000Z'),
 	};
@@ -98,6 +100,8 @@ describe('POST /auth/sign-up', () => {
 					AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
 					AppFeature.FINANCIAL_VARIABLE_EXPENSE_READ,
 					AppFeature.FINANCIAL_VARIABLE_EXPENSE_WRITE,
+					AppFeature.FINANCIAL_FIXED_INCOME_READ,
+					AppFeature.FINANCIAL_FIXED_INCOME_WRITE,
 				],
 				createdAt: '2026-04-19T00:00:00.000Z',
 			});
@@ -120,6 +124,8 @@ describe('POST /auth/sign-up', () => {
 				AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
 				AppFeature.FINANCIAL_VARIABLE_EXPENSE_READ,
 				AppFeature.FINANCIAL_VARIABLE_EXPENSE_WRITE,
+				AppFeature.FINANCIAL_FIXED_INCOME_READ,
+				AppFeature.FINANCIAL_FIXED_INCOME_WRITE,
 			]);
 			expect(mockUserModel.create).toHaveBeenCalledWith({
 				...validPayload,
@@ -130,6 +136,8 @@ describe('POST /auth/sign-up', () => {
 					AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
 					AppFeature.FINANCIAL_VARIABLE_EXPENSE_READ,
 					AppFeature.FINANCIAL_VARIABLE_EXPENSE_WRITE,
+					AppFeature.FINANCIAL_FIXED_INCOME_READ,
+					AppFeature.FINANCIAL_FIXED_INCOME_WRITE,
 				],
 				modules: [AppModule.FINANCIAL],
 			});
