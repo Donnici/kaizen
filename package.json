@@ -1,0 +1,17 @@
+{
+  "name": "kaizen",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "pnpm --filter @kaizen/api test",
+    "test:e2e": "pnpm --filter @kaizen/api test:e2e",
+    "test:cov": "pnpm --filter @kaizen/api test:cov"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.29.3",
+  "devDependencies": {
+    "@biomejs/biome": "2.4.12"
+  }
+}
