@@ -6,7 +6,7 @@ import type {
 	CreateUserData,
 	IUserRepository,
 } from '../../domain/repositories/user.repository.interface';
-import { UserRecord, type UserDocument } from '../schemas/user.schema';
+import { type UserDocument, UserRecord } from '../schemas/user.schema';
 
 @Injectable()
 export class MongooseUserRepository implements IUserRepository {
@@ -26,7 +26,13 @@ export class MongooseUserRepository implements IUserRepository {
 	}
 
 	async save(data: CreateUserData): Promise<User> {
-		const doc = await this.userModel.create(data);
+		const doc = await this.userModel.create({
+			name: data.name,
+			email: data.email,
+			phone: data.phone,
+			features: data.features,
+			modules: data.modules,
+		});
 		return this.toEntity(doc);
 	}
 

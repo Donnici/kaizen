@@ -1,8 +1,9 @@
-import type { AppFeature, AppModule } from '@kaizen/utils';
+import type { AppFeature, AppModule, RequestUser } from '@kaizen/utils';
 
 export const SIGN_UP_USE_CASE = Symbol('SIGN_UP_USE_CASE');
 
 export interface SignUpInput {
+	user: RequestUser;
 	name: string;
 	email: string;
 	phone: string;
