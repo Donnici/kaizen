@@ -1,9 +1,12 @@
-import { type INestApplication, Logger } from '@nestjs/common';
-import { type ExecutionContext } from '@nestjs/common';
+import { AppFeature, AppModule, type AuthenticatedUser } from '@kaizen/utils';
+import {
+	type ExecutionContext,
+	type INestApplication,
+	Logger,
+} from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { AppFeature, AppModule, type AuthenticatedUser } from '@kaizen/utils';
 import { AuthModule } from '../../src/auth/auth.module';
 import { EmailAlreadyExistsError } from '../../src/auth/domain/errors/email-already-exists.error';
 import { PhoneAlreadyExistsError } from '../../src/auth/domain/errors/phone-already-exists.error';

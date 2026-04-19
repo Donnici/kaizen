@@ -7,8 +7,8 @@ import type {
 	IAuthCodeRepository,
 } from '../../domain/repositories/auth-code.repository.interface';
 import {
-	AuthCodeRecord,
 	type AuthCodeDocument,
+	AuthCodeRecord,
 } from '../schemas/auth-code.schema';
 
 @Injectable()

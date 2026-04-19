@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { AppFeature, hasFeature } from '@kaizen/utils';
+import { Inject, Injectable } from '@nestjs/common';
 import { ForbiddenError } from '../../../shared/errors/forbidden.error';
 import {
 	FIXED_EXPENSE_REPOSITORY,

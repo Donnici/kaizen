@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { AppFeature, AppModule, hasFeature } from '@kaizen/utils';
+import { Inject, Injectable } from '@nestjs/common';
 import { ForbiddenError } from '../../../shared/errors/forbidden.error';
 import { EmailAlreadyExistsError } from '../../domain/errors/email-already-exists.error';
 import { PhoneAlreadyExistsError } from '../../domain/errors/phone-already-exists.error';
 import {
-	USER_REPOSITORY,
 	type IUserRepository,
+	USER_REPOSITORY,
 } from '../../domain/repositories/user.repository.interface';
 import type {
 	ISignUpUseCase,

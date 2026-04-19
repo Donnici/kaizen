@@ -1,9 +1,9 @@
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
+import { AppFeature } from '@kaizen/utils';
 import { type INestApplication } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { AppFeature } from '@kaizen/utils';
 import { AuthModule } from '../../src/auth/auth.module';
 import { CodeAlreadyUsedError } from '../../src/auth/domain/errors/code-already-used.error';
 import { CodeExpiredError } from '../../src/auth/domain/errors/code-expired.error';

@@ -7,8 +7,8 @@ import type {
 	IFixedExpenseRepository,
 } from '../../domain/repositories/fixed-expense.repository.interface';
 import {
-	FixedExpenseRecord,
 	type FixedExpenseDocument,
+	FixedExpenseRecord,
 } from '../schemas/fixed-expense.schema';
 
 @Injectable()

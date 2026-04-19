@@ -1,14 +1,13 @@
-import { type INestApplication } from '@nestjs/common';
+import { AppFeature, AppModule, type AuthenticatedUser } from '@kaizen/utils';
+import { type ExecutionContext, type INestApplication } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { type ExecutionContext } from '@nestjs/common';
-import { AppFeature, AppModule, type AuthenticatedUser } from '@kaizen/utils';
-import { FinancialModule } from '../../src/financial/financial.module';
-import { FixedExpenseRevisionRecord } from '../../src/financial/infrastructure/schemas/fixed-expense-revision.schema';
-import { FixedExpenseRecord } from '../../src/financial/infrastructure/schemas/fixed-expense.schema';
 import { getCurrentMonth } from '../../src/financial/domain/utils/get-current-month.util';
+import { FinancialModule } from '../../src/financial/financial.module';
+import { FixedExpenseRecord } from '../../src/financial/infrastructure/schemas/fixed-expense.schema';
+import { FixedExpenseRevisionRecord } from '../../src/financial/infrastructure/schemas/fixed-expense-revision.schema';
 
 const mockUser: AuthenticatedUser = {
 	anonymous: false,

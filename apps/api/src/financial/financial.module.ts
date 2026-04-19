@@ -6,18 +6,18 @@ import { LIST_FIXED_EXPENSES_USE_CASE } from './application/use-cases/list-fixed
 import { ListFixedExpensesUseCaseImpl } from './application/use-cases/list-fixed-expenses.use-case.impl';
 import { UPDATE_FIXED_EXPENSE_AMOUNT_USE_CASE } from './application/use-cases/update-fixed-expense-amount.use-case';
 import { UpdateFixedExpenseAmountUseCaseImpl } from './application/use-cases/update-fixed-expense-amount.use-case.impl';
-import { FIXED_EXPENSE_REVISION_REPOSITORY } from './domain/repositories/fixed-expense-revision.repository.interface';
 import { FIXED_EXPENSE_REPOSITORY } from './domain/repositories/fixed-expense.repository.interface';
-import { MongooseFixedExpenseRevisionRepository } from './infrastructure/repositories/mongoose-fixed-expense-revision.repository';
+import { FIXED_EXPENSE_REVISION_REPOSITORY } from './domain/repositories/fixed-expense-revision.repository.interface';
 import { MongooseFixedExpenseRepository } from './infrastructure/repositories/mongoose-fixed-expense.repository';
-import {
-	FixedExpenseRevisionRecord,
-	FixedExpenseRevisionSchema,
-} from './infrastructure/schemas/fixed-expense-revision.schema';
+import { MongooseFixedExpenseRevisionRepository } from './infrastructure/repositories/mongoose-fixed-expense-revision.repository';
 import {
 	FixedExpenseRecord,
 	FixedExpenseSchema,
 } from './infrastructure/schemas/fixed-expense.schema';
+import {
+	FixedExpenseRevisionRecord,
+	FixedExpenseRevisionSchema,
+} from './infrastructure/schemas/fixed-expense-revision.schema';
 import { FinancialController } from './presentation/controllers/financial.controller';
 
 @Module({

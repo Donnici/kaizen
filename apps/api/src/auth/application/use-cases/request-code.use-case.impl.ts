@@ -1,16 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { AppFeature, hasFeature } from '@kaizen/utils';
+import { Inject, Injectable } from '@nestjs/common';
 import {
 	AUTH_CODE_REPOSITORY,
 	type IAuthCodeRepository,
 } from '../../domain/repositories/auth-code.repository.interface';
 import {
-	MAIL_SERVICE,
 	type IMailService,
+	MAIL_SERVICE,
 } from '../../domain/services/mail.service.interface';
 import {
-	OTP_SERVICE,
 	type IOtpService,
+	OTP_SERVICE,
 } from '../../domain/services/otp.service.interface';
 import type {
 	IRequestCodeUseCase,

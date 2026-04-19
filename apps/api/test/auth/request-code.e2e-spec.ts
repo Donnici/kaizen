@@ -1,8 +1,8 @@
+import { AppFeature } from '@kaizen/utils';
 import { type INestApplication } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { AppFeature } from '@kaizen/utils';
 import { AuthModule } from '../../src/auth/auth.module';
 import { AuthCodeRecord } from '../../src/auth/infrastructure/schemas/auth-code.schema';
 import { UserRecord } from '../../src/auth/infrastructure/schemas/user.schema';

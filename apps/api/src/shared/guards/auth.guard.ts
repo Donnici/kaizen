@@ -1,16 +1,16 @@
 import {
+	type AnonymousUser,
+	AppFeature,
+	type AppModule,
+	type AuthenticatedUser,
+} from '@kaizen/utils';
+import {
 	type CanActivate,
 	type ExecutionContext,
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import {
-	AppFeature,
-	type AnonymousUser,
-	type AppModule,
-	type AuthenticatedUser,
-} from '@kaizen/utils';
 import type { Request } from 'express';
 
 interface JwtPayload {
