@@ -1,11 +1,15 @@
 import { type INestApplication, Logger } from '@nestjs/common';
+import { type ExecutionContext } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+import { AppFeature, type AuthenticatedUser } from '@kaizen/utils';
 import { AuthModule } from '../../src/auth/auth.module';
 import { EmailAlreadyExistsError } from '../../src/auth/domain/errors/email-already-exists.error';
 import { PhoneAlreadyExistsError } from '../../src/auth/domain/errors/phone-already-exists.error';
+import { AuthCodeRecord } from '../../src/auth/infrastructure/schemas/auth-code.schema';
 import { UserRecord } from '../../src/auth/infrastructure/schemas/user.schema';
+import { AuthGuard } from '../../src/shared/guards/auth.guard';
 
 describe('POST /auth/sign-up', () => {
 	let app: INestApplication;
@@ -13,6 +17,12 @@ describe('POST /auth/sign-up', () => {
 	const mockUserModel = {
 		findOne: jest.fn(),
 		create: jest.fn(),
+	};
+
+	const mockAuthCodeModel = {
+		findOne: jest.fn(),
+		create: jest.fn(),
+		updateOne: jest.fn(),
 	};
 
 	const validPayload = {
@@ -27,16 +37,20 @@ describe('POST /auth/sign-up', () => {
 		email: 'john@example.com',
 		phone: '+5511999999999',
 		modules: [],
-		features: [],
+		features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
 		createdAt: new Date('2026-04-19T00:00:00.000Z'),
 	};
 
 	beforeAll(async () => {
+		process.env.JWT_SECRET = 'test-secret';
+
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [AuthModule],
 		})
 			.overrideProvider(getModelToken(UserRecord.name))
 			.useValue(mockUserModel)
+			.overrideProvider(getModelToken(AuthCodeRecord.name))
+			.useValue(mockAuthCodeModel)
 			.compile();
 
 		app = module.createNestApplication();
@@ -67,12 +81,12 @@ describe('POST /auth/sign-up', () => {
 				email: 'john@example.com',
 				phone: '+5511999999999',
 				modules: [],
-				features: [],
+				features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
 				createdAt: '2026-04-19T00:00:00.000Z',
 			});
 		});
 
-		it('should save user with empty modules and features', async () => {
+		it('should save user with AUTH_REQUEST_CODE and AUTH_VERIFY_CODE features', async () => {
 			mockUserModel.findOne.mockResolvedValue(null);
 			mockUserModel.create.mockResolvedValue(mockUserDoc);
 
@@ -81,9 +95,16 @@ describe('POST /auth/sign-up', () => {
 				.send(validPayload)
 				.expect(201);
 
+			expect(response.body.features).toEqual([
+				AppFeature.AUTH_REQUEST_CODE,
+				AppFeature.AUTH_VERIFY_CODE,
+			]);
 			expect(response.body.modules).toEqual([]);
-			expect(response.body.features).toEqual([]);
-			expect(mockUserModel.create).toHaveBeenCalledWith(validPayload);
+			expect(mockUserModel.create).toHaveBeenCalledWith({
+				...validPayload,
+				features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
+				modules: [],
+			});
 		});
 
 		it('should accept request without token (anonymous user with AUTH_SIGN_UP)', async () => {
@@ -122,9 +143,7 @@ describe('POST /auth/sign-up', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({ field: 'email' }),
-				]),
+				expect.arrayContaining([expect.objectContaining({ field: 'email' })]),
 			);
 		});
 
@@ -135,9 +154,7 @@ describe('POST /auth/sign-up', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({ field: 'phone' }),
-				]),
+				expect.arrayContaining([expect.objectContaining({ field: 'phone' })]),
 			);
 		});
 
@@ -156,6 +173,43 @@ describe('POST /auth/sign-up', () => {
 				}),
 				'Body validation failed',
 			);
+		});
+	});
+
+	describe('permissions (403)', () => {
+		const authenticatedUserWithoutSignUp: AuthenticatedUser = {
+			anonymous: false,
+			id: 'user-id-456',
+			name: 'Jane Doe',
+			email: 'jane@example.com',
+			phone: '+5511888888888',
+			modules: [],
+			features: [],
+		};
+
+		let guardSpy: jest.SpyInstance;
+
+		beforeEach(() => {
+			guardSpy = jest
+				.spyOn(AuthGuard.prototype, 'canActivate')
+				.mockImplementation((ctx: ExecutionContext) => {
+					ctx.switchToHttp().getRequest<{ user: unknown }>().user =
+						authenticatedUserWithoutSignUp;
+					return true;
+				});
+		});
+
+		afterEach(() => {
+			guardSpy.mockRestore();
+		});
+
+		it('should reject when authenticated user tries to sign up (AUTH_SIGN_UP not present)', async () => {
+			const response = await request(app.getHttpServer())
+				.post('/auth/sign-up')
+				.send(validPayload)
+				.expect(403);
+
+			expect(response.body.statusCode).toBe(403);
 		});
 	});
 

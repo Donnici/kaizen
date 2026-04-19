@@ -1,62 +1,60 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+    push:
+        branches: [main]
+    pull_request:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
-  # ─── Change detection ────────────────────────────────────────────────────────
-  changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    outputs:
-      api: ${{ steps.filter.outputs.api }}
-    steps:
-      - uses: actions/checkout@v4
+    changes:
+        name: Detect changes
+        runs-on: ubuntu-latest
+        outputs:
+            api: ${{ steps.filter.outputs.api }}
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            api:
-              - 'apps/api/**'
-              - 'packages/utils/**'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
+            - uses: dorny/paths-filter@v3
+              id: filter
+              with:
+                  filters: |
+                      api:
+                        - 'apps/api/**'
+                        - 'packages/utils/**'
+                        - 'package.json'
+                        - 'pnpm-lock.yaml'
 
-  # ─── API ─────────────────────────────────────────────────────────────────────
-  api:
-    name: "API — lint · build · test"
-    needs: changes
-    if: needs.changes.outputs.api == 'true'
-    runs-on: ubuntu-latest
+    api:
+        name: "API — lint · build · test"
+        needs: changes
+        if: needs.changes.outputs.api == 'true'
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm --filter @kaizen/api lint
+            - name: Lint
+              run: pnpm --filter @kaizen/api lint
 
-      - name: Build
-        run: pnpm --filter @kaizen/api build
+            - name: Build
+              run: pnpm --filter @kaizen/api build
 
-      - name: Unit tests
-        run: pnpm --filter @kaizen/api test
+            - name: Unit tests
+              run: pnpm --filter @kaizen/api test
 
-      - name: Integration tests
-        run: pnpm --filter @kaizen/api test:e2e
+            - name: Integration tests
+              run: pnpm --filter @kaizen/api test:e2e

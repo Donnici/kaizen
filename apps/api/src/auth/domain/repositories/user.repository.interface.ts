@@ -1,3 +1,4 @@
+import type { AppFeature, AppModule } from '@kaizen/utils';
 import type { User } from '../entities/user.entity';
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
@@ -6,6 +7,8 @@ export interface CreateUserData {
 	name: string;
 	email: string;
 	phone: string;
+	features: AppFeature[];
+	modules: AppModule[];
 }
 
 export interface IUserRepository {

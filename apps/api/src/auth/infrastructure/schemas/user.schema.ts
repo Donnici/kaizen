@@ -1,6 +1,6 @@
+import { AppFeature, AppModule } from '@kaizen/utils';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { type HydratedDocument, Types } from 'mongoose';
-import { AppFeature, AppModule } from '@kaizen/utils';
 
 export type UserDocument = HydratedDocument<UserRecord> & {
 	_id: Types.ObjectId;
