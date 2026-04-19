@@ -8,6 +8,7 @@ import { getCurrentMonth } from '../../src/financial/domain/utils/get-current-mo
 import { FinancialModule } from '../../src/financial/financial.module';
 import { FixedExpenseRecord } from '../../src/financial/infrastructure/schemas/fixed-expense.schema';
 import { FixedExpenseRevisionRecord } from '../../src/financial/infrastructure/schemas/fixed-expense-revision.schema';
+import { VariableExpenseRecord } from '../../src/financial/infrastructure/schemas/variable-expense.schema';
 
 const mockUser: AuthenticatedUser = {
 	anonymous: false,
@@ -61,6 +62,13 @@ describe('Financial - Fixed Expenses', () => {
 	};
 
 	beforeAll(async () => {
+		const mockVariableExpenseModel = {
+			create: jest.fn(),
+			find: jest.fn(),
+			findOne: jest.fn(),
+			deleteOne: jest.fn(),
+		};
+
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [FinancialModule],
 			providers: [{ provide: APP_GUARD, useValue: mockGuard }],
@@ -69,6 +77,8 @@ describe('Financial - Fixed Expenses', () => {
 			.useValue(mockExpenseModel)
 			.overrideProvider(getModelToken(FixedExpenseRevisionRecord.name))
 			.useValue(mockRevisionModel)
+			.overrideProvider(getModelToken(VariableExpenseRecord.name))
+			.useValue(mockVariableExpenseModel)
 			.compile();
 
 		app = module.createNestApplication();

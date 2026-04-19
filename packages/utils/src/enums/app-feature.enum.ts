@@ -4,4 +4,6 @@ export enum AppFeature {
 	AUTH_VERIFY_CODE = 'auth:verify-code',
 	FINANCIAL_FIXED_EXPENSE_READ = 'financial:fixed-expense:read',
 	FINANCIAL_FIXED_EXPENSE_WRITE = 'financial:fixed-expense:write',
+	FINANCIAL_VARIABLE_EXPENSE_READ = 'financial:variable-expense:read',
+	FINANCIAL_VARIABLE_EXPENSE_WRITE = 'financial:variable-expense:write',
 }
