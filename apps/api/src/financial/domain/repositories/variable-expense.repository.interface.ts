@@ -16,6 +16,11 @@ export interface CreateVariableExpenseData {
 export interface IVariableExpenseRepository {
 	save(data: CreateVariableExpenseData): Promise<VariableExpense>;
 	findByMonth(userId: string, month: string): Promise<VariableExpense[]>;
+	findByMonthRange(
+		userId: string,
+		from: string,
+		to: string,
+	): Promise<VariableExpense[]>;
 	findById(id: string): Promise<VariableExpense | null>;
 	delete(id: string): Promise<void>;
 }

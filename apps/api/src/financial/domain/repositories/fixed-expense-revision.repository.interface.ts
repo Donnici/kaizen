@@ -16,4 +16,5 @@ export interface IFixedExpenseRevisionRepository {
 		fixedExpenseId: string,
 		month: string,
 	): Promise<FixedExpenseRevision | null>;
+	findAllByFixedExpenseIds(ids: string[]): Promise<FixedExpenseRevision[]>;
 }

@@ -1,31 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { VariableExpense } from '../../domain/entities/variable-expense.entity';
+import { VariableIncome } from '../../domain/entities/variable-income.entity';
 import type {
-	CreateVariableExpenseData,
-	IVariableExpenseRepository,
-} from '../../domain/repositories/variable-expense.repository.interface';
+	CreateVariableIncomeData,
+	IVariableIncomeRepository,
+} from '../../domain/repositories/variable-income.repository.interface';
 import {
-	type VariableExpenseDocument,
-	VariableExpenseRecord,
-} from '../schemas/variable-expense.schema';
+	type VariableIncomeDocument,
+	VariableIncomeRecord,
+} from '../schemas/variable-income.schema';
 
 @Injectable()
-export class MongooseVariableExpenseRepository
-	implements IVariableExpenseRepository
+export class MongooseVariableIncomeRepository
+	implements IVariableIncomeRepository
 {
 	constructor(
-		@InjectModel(VariableExpenseRecord.name)
-		private readonly model: Model<VariableExpenseDocument>,
+		@InjectModel(VariableIncomeRecord.name)
+		private readonly model: Model<VariableIncomeDocument>,
 	) {}
 
-	async save(data: CreateVariableExpenseData): Promise<VariableExpense> {
+	async save(data: CreateVariableIncomeData): Promise<VariableIncome> {
 		const doc = await this.model.create(data);
 		return this.toEntity(doc);
 	}
 
-	async findByMonth(userId: string, month: string): Promise<VariableExpense[]> {
+	async findByMonth(userId: string, month: string): Promise<VariableIncome[]> {
 		const docs = await this.model.find({ userId, month });
 		return docs.map((doc) => this.toEntity(doc));
 	}
@@ -34,7 +34,7 @@ export class MongooseVariableExpenseRepository
 		userId: string,
 		from: string,
 		to: string,
-	): Promise<VariableExpense[]> {
+	): Promise<VariableIncome[]> {
 		const docs = await this.model.find({
 			userId,
 			month: { $gte: from, $lte: to },
@@ -42,7 +42,7 @@ export class MongooseVariableExpenseRepository
 		return docs.map((doc) => this.toEntity(doc));
 	}
 
-	async findById(id: string): Promise<VariableExpense | null> {
+	async findById(id: string): Promise<VariableIncome | null> {
 		const doc = await this.model.findOne({ _id: id });
 		return doc ? this.toEntity(doc) : null;
 	}
@@ -51,8 +51,8 @@ export class MongooseVariableExpenseRepository
 		await this.model.deleteOne({ _id: id });
 	}
 
-	private toEntity(doc: VariableExpenseDocument): VariableExpense {
-		return new VariableExpense(
+	private toEntity(doc: VariableIncomeDocument): VariableIncome {
+		return new VariableIncome(
 			doc._id.toString(),
 			doc.userId,
 			doc.name,

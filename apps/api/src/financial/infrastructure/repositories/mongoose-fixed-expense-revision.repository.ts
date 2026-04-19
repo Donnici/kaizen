@@ -39,6 +39,13 @@ export class MongooseFixedExpenseRevisionRepository
 		return doc ? this.toEntity(doc) : null;
 	}
 
+	async findAllByFixedExpenseIds(
+		ids: string[],
+	): Promise<FixedExpenseRevision[]> {
+		const docs = await this.model.find({ fixedExpenseId: { $in: ids } });
+		return docs.map((doc) => this.toEntity(doc));
+	}
+
 	private toEntity(doc: FixedExpenseRevisionDocument): FixedExpenseRevision {
 		return new FixedExpenseRevision(
 			doc._id.toString(),

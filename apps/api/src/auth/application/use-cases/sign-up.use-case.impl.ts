@@ -43,6 +43,11 @@ export class SignUpUseCaseImpl implements ISignUpUseCase {
 				AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
 				AppFeature.FINANCIAL_VARIABLE_EXPENSE_READ,
 				AppFeature.FINANCIAL_VARIABLE_EXPENSE_WRITE,
+				AppFeature.FINANCIAL_FIXED_INCOME_READ,
+				AppFeature.FINANCIAL_FIXED_INCOME_WRITE,
+				AppFeature.FINANCIAL_VARIABLE_INCOME_READ,
+				AppFeature.FINANCIAL_VARIABLE_INCOME_WRITE,
+				AppFeature.FINANCIAL_SUMMARY_READ,
 			],
 			modules: [AppModule.FINANCIAL],
 		});

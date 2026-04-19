@@ -1,4 +1,4 @@
-export class VariableExpense {
+export class VariableIncome {
 	constructor(
 		public readonly id: string,
 		public readonly userId: string,
