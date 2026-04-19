@@ -122,9 +122,7 @@ describe('POST /auth/sign-up', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({ field: 'email' }),
-				]),
+				expect.arrayContaining([expect.objectContaining({ field: 'email' })]),
 			);
 		});
 
@@ -135,9 +133,7 @@ describe('POST /auth/sign-up', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({ field: 'phone' }),
-				]),
+				expect.arrayContaining([expect.objectContaining({ field: 'phone' })]),
 			);
 		});
 
@@ -157,6 +153,10 @@ describe('POST /auth/sign-up', () => {
 				'Body validation failed',
 			);
 		});
+	});
+
+	describe('permissions (403)', () => {
+		it.todo('should reject when authenticated user tries to sign up (AUTH_SIGN_UP not present)');
 	});
 
 	describe('business rules (409)', () => {

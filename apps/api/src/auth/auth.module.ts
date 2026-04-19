@@ -11,9 +11,7 @@ import { AuthController } from './presentation/controllers/auth.controller';
 
 @Module({
 	imports: [
-		MongooseModule.forFeature([
-			{ name: UserRecord.name, schema: UserSchema },
-		]),
+		MongooseModule.forFeature([{ name: UserRecord.name, schema: UserSchema }]),
 	],
 	controllers: [AuthController],
 	providers: [
