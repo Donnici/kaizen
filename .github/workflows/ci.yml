@@ -28,12 +28,11 @@ jobs:
                         - 'package.json'
                         - 'pnpm-lock.yaml'
 
-    api:
-        name: "API — lint · build · test"
+    api-lint:
+        name: "API — lint"
         needs: changes
         if: needs.changes.outputs.api == 'true'
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v4
 
@@ -50,8 +49,44 @@ jobs:
             - name: Lint
               run: pnpm --filter @kaizen/api lint
 
+    api-build:
+        name: "API — build"
+        needs: changes
+        if: needs.changes.outputs.api == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
             - name: Build
               run: pnpm --filter @kaizen/api build
+
+    api-test:
+        name: "API — tests"
+        needs: changes
+        if: needs.changes.outputs.api == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
             - name: Unit tests
               run: pnpm --filter @kaizen/api test

@@ -41,6 +41,8 @@ export class SignUpUseCaseImpl implements ISignUpUseCase {
 				AppFeature.AUTH_VERIFY_CODE,
 				AppFeature.FINANCIAL_FIXED_EXPENSE_READ,
 				AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
+				AppFeature.FINANCIAL_VARIABLE_EXPENSE_READ,
+				AppFeature.FINANCIAL_VARIABLE_EXPENSE_WRITE,
 			],
 			modules: [AppModule.FINANCIAL],
 		});
