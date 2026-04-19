@@ -156,7 +156,9 @@ describe('POST /auth/sign-up', () => {
 	});
 
 	describe('permissions (403)', () => {
-		it.todo('should reject when authenticated user tries to sign up (AUTH_SIGN_UP not present)');
+		it.todo(
+			'should reject when authenticated user tries to sign up (AUTH_SIGN_UP not present)',
+		);
 	});
 
 	describe('business rules (409)', () => {

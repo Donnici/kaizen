@@ -1,6 +1,8 @@
 describe('POST /auth/verify-code', () => {
 	describe('happy path (200)', () => {
-		it.todo('should return JWT when code is valid and AUTH_VERIFY_CODE is present');
+		it.todo(
+			'should return JWT when code is valid and AUTH_VERIFY_CODE is present',
+		);
 
 		it.todo('JWT should contain id, modules and features of the user');
 	});
