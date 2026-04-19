@@ -16,7 +16,9 @@ const TEST_CODE = '123456';
 const TEST_CODE_HASH = createHash('sha256').update(TEST_CODE).digest('hex');
 
 function decodeJwtPayload(token: string): Record<string, unknown> {
-	return JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf-8'));
+	return JSON.parse(
+		Buffer.from(token.split('.')[1], 'base64url').toString('utf-8'),
+	);
 }
 
 describe('POST /auth/verify-code', () => {
@@ -187,7 +189,9 @@ describe('POST /auth/verify-code', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([expect.objectContaining({ field: 'identifier' })]),
+				expect.arrayContaining([
+					expect.objectContaining({ field: 'identifier' }),
+				]),
 			);
 		});
 

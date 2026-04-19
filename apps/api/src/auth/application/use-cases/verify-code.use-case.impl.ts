@@ -13,7 +13,11 @@ import {
 	OTP_SERVICE,
 	type IOtpService,
 } from '../../domain/services/otp.service.interface';
-import type { IVerifyCodeUseCase, VerifyCodeInput, VerifyCodeOutput } from './verify-code.use-case';
+import type {
+	IVerifyCodeUseCase,
+	VerifyCodeInput,
+	VerifyCodeOutput,
+} from './verify-code.use-case';
 
 @Injectable()
 export class VerifyCodeUseCaseImpl implements IVerifyCodeUseCase {

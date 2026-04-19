@@ -32,7 +32,10 @@ import { EmailAlreadyExistsError } from '../../domain/errors/email-already-exist
 import { InvalidCodeError } from '../../domain/errors/invalid-code.error';
 import { PhoneAlreadyExistsError } from '../../domain/errors/phone-already-exists.error';
 import { UnauthorizedError } from '../../domain/errors/unauthorized.error';
-import { RequestCodeSchema, type RequestCodeDto } from '../dtos/request-code.dto';
+import {
+	RequestCodeSchema,
+	type RequestCodeDto,
+} from '../dtos/request-code.dto';
 import { SignUpSchema, type SignUpDto } from '../dtos/sign-up.dto';
 import { VerifyCodeSchema, type VerifyCodeDto } from '../dtos/verify-code.dto';
 

@@ -127,7 +127,9 @@ describe('POST /auth/request-code', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([expect.objectContaining({ field: 'identifier' })]),
+				expect.arrayContaining([
+					expect.objectContaining({ field: 'identifier' }),
+				]),
 			);
 		});
 
@@ -138,7 +140,9 @@ describe('POST /auth/request-code', () => {
 				.expect(422);
 
 			expect(response.body.message).toEqual(
-				expect.arrayContaining([expect.objectContaining({ field: 'identifier' })]),
+				expect.arrayContaining([
+					expect.objectContaining({ field: 'identifier' }),
+				]),
 			);
 		});
 	});

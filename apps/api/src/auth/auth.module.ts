@@ -17,7 +17,10 @@ import { MAIL_SERVICE } from './domain/services/mail.service.interface';
 import { OTP_SERVICE } from './domain/services/otp.service.interface';
 import { MongooseAuthCodeRepository } from './infrastructure/repositories/mongoose-auth-code.repository';
 import { MongooseUserRepository } from './infrastructure/repositories/mongoose-user.repository';
-import { AuthCodeRecord, AuthCodeSchema } from './infrastructure/schemas/auth-code.schema';
+import {
+	AuthCodeRecord,
+	AuthCodeSchema,
+} from './infrastructure/schemas/auth-code.schema';
 import { UserRecord, UserSchema } from './infrastructure/schemas/user.schema';
 import { ConsoleMailService } from './infrastructure/services/console-mail.service';
 import { OtpService } from './infrastructure/services/otp.service';

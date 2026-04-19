@@ -12,7 +12,10 @@ import {
 	OTP_SERVICE,
 	type IOtpService,
 } from '../../domain/services/otp.service.interface';
-import type { IRequestCodeUseCase, RequestCodeInput } from './request-code.use-case';
+import type {
+	IRequestCodeUseCase,
+	RequestCodeInput,
+} from './request-code.use-case';
 
 const CODE_TTL_MS = 15 * 60 * 1000;
 
@@ -36,7 +39,11 @@ export class RequestCodeUseCaseImpl implements IRequestCodeUseCase {
 		const codeHash = this.otpService.hash(code);
 		const expiresAt = new Date(Date.now() + CODE_TTL_MS);
 
-		await this.authCodeRepository.save({ userId: user.id, codeHash, expiresAt });
+		await this.authCodeRepository.save({
+			userId: user.id,
+			codeHash,
+			expiresAt,
+		});
 		await this.mailService.sendAuthCode(user.email, code);
 	}
 }

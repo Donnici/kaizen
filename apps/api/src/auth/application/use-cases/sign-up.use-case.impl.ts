@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AppFeature, hasFeature } from '@kaizen/utils';
+import { AppFeature, AppModule, hasFeature } from '@kaizen/utils';
 import { ForbiddenError } from '../../../shared/errors/forbidden.error';
 import { EmailAlreadyExistsError } from '../../domain/errors/email-already-exists.error';
 import { PhoneAlreadyExistsError } from '../../domain/errors/phone-already-exists.error';
@@ -36,8 +36,13 @@ export class SignUpUseCaseImpl implements ISignUpUseCase {
 			name: input.name,
 			email: input.email,
 			phone: input.phone,
-			features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
-			modules: [],
+			features: [
+				AppFeature.AUTH_REQUEST_CODE,
+				AppFeature.AUTH_VERIFY_CODE,
+				AppFeature.FINANCIAL_FIXED_EXPENSE_READ,
+				AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
+			],
+			modules: [AppModule.FINANCIAL],
 		});
 
 		return {

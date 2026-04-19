@@ -3,7 +3,7 @@ import { type ExecutionContext } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { AppFeature, type AuthenticatedUser } from '@kaizen/utils';
+import { AppFeature, AppModule, type AuthenticatedUser } from '@kaizen/utils';
 import { AuthModule } from '../../src/auth/auth.module';
 import { EmailAlreadyExistsError } from '../../src/auth/domain/errors/email-already-exists.error';
 import { PhoneAlreadyExistsError } from '../../src/auth/domain/errors/phone-already-exists.error';
@@ -36,8 +36,13 @@ describe('POST /auth/sign-up', () => {
 		name: 'John Doe',
 		email: 'john@example.com',
 		phone: '+5511999999999',
-		modules: [],
-		features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
+		modules: [AppModule.FINANCIAL],
+		features: [
+			AppFeature.AUTH_REQUEST_CODE,
+			AppFeature.AUTH_VERIFY_CODE,
+			AppFeature.FINANCIAL_FIXED_EXPENSE_READ,
+			AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
+		],
 		createdAt: new Date('2026-04-19T00:00:00.000Z'),
 	};
 
@@ -80,13 +85,18 @@ describe('POST /auth/sign-up', () => {
 				name: 'John Doe',
 				email: 'john@example.com',
 				phone: '+5511999999999',
-				modules: [],
-				features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
+				modules: [AppModule.FINANCIAL],
+				features: [
+					AppFeature.AUTH_REQUEST_CODE,
+					AppFeature.AUTH_VERIFY_CODE,
+					AppFeature.FINANCIAL_FIXED_EXPENSE_READ,
+					AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
+				],
 				createdAt: '2026-04-19T00:00:00.000Z',
 			});
 		});
 
-		it('should save user with AUTH_REQUEST_CODE and AUTH_VERIFY_CODE features', async () => {
+		it('should save user with auth and financial features and FINANCIAL module', async () => {
 			mockUserModel.findOne.mockResolvedValue(null);
 			mockUserModel.create.mockResolvedValue(mockUserDoc);
 
@@ -95,15 +105,22 @@ describe('POST /auth/sign-up', () => {
 				.send(validPayload)
 				.expect(201);
 
+			expect(response.body.modules).toEqual([AppModule.FINANCIAL]);
 			expect(response.body.features).toEqual([
 				AppFeature.AUTH_REQUEST_CODE,
 				AppFeature.AUTH_VERIFY_CODE,
+				AppFeature.FINANCIAL_FIXED_EXPENSE_READ,
+				AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
 			]);
-			expect(response.body.modules).toEqual([]);
 			expect(mockUserModel.create).toHaveBeenCalledWith({
 				...validPayload,
-				features: [AppFeature.AUTH_REQUEST_CODE, AppFeature.AUTH_VERIFY_CODE],
-				modules: [],
+				features: [
+					AppFeature.AUTH_REQUEST_CODE,
+					AppFeature.AUTH_VERIFY_CODE,
+					AppFeature.FINANCIAL_FIXED_EXPENSE_READ,
+					AppFeature.FINANCIAL_FIXED_EXPENSE_WRITE,
+				],
+				modules: [AppModule.FINANCIAL],
 			});
 		});
 

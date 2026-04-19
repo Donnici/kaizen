@@ -6,7 +6,10 @@ import type {
 	CreateAuthCodeData,
 	IAuthCodeRepository,
 } from '../../domain/repositories/auth-code.repository.interface';
-import { AuthCodeRecord, type AuthCodeDocument } from '../schemas/auth-code.schema';
+import {
+	AuthCodeRecord,
+	type AuthCodeDocument,
+} from '../schemas/auth-code.schema';
 
 @Injectable()
 export class MongooseAuthCodeRepository implements IAuthCodeRepository {
@@ -26,7 +29,10 @@ export class MongooseAuthCodeRepository implements IAuthCodeRepository {
 	}
 
 	async markAsUsed(id: string): Promise<void> {
-		await this.authCodeModel.updateOne({ _id: id }, { $set: { usedAt: new Date() } });
+		await this.authCodeModel.updateOne(
+			{ _id: id },
+			{ $set: { usedAt: new Date() } },
+		);
 	}
 
 	private toEntity(doc: AuthCodeDocument): AuthCode {
