@@ -1,18 +1,21 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { AppFeature, hasFeature } from '@kaizen/utils';
+import { Inject, Injectable } from '@nestjs/common';
 import {
 	AUTH_CODE_REPOSITORY,
 	type IAuthCodeRepository,
 } from '../../domain/repositories/auth-code.repository.interface';
 import {
-	MAIL_SERVICE,
 	type IMailService,
+	MAIL_SERVICE,
 } from '../../domain/services/mail.service.interface';
 import {
-	OTP_SERVICE,
 	type IOtpService,
+	OTP_SERVICE,
 } from '../../domain/services/otp.service.interface';
-import type { IRequestCodeUseCase, RequestCodeInput } from './request-code.use-case';
+import type {
+	IRequestCodeUseCase,
+	RequestCodeInput,
+} from './request-code.use-case';
 
 const CODE_TTL_MS = 15 * 60 * 1000;
 
@@ -36,7 +39,11 @@ export class RequestCodeUseCaseImpl implements IRequestCodeUseCase {
 		const codeHash = this.otpService.hash(code);
 		const expiresAt = new Date(Date.now() + CODE_TTL_MS);
 
-		await this.authCodeRepository.save({ userId: user.id, codeHash, expiresAt });
+		await this.authCodeRepository.save({
+			userId: user.id,
+			codeHash,
+			expiresAt,
+		});
 		await this.mailService.sendAuthCode(user.email, code);
 	}
 }

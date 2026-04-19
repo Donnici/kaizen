@@ -1,4 +1,4 @@
-import { createHash, randomInt } from 'crypto';
+import { createHash, randomInt } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import type { IOtpService } from '../../domain/services/otp.service.interface';
 

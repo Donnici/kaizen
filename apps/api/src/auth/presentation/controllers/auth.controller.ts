@@ -1,3 +1,4 @@
+import type { RequestUser } from '@kaizen/utils';
 import {
 	Body,
 	ConflictException,
@@ -9,22 +10,21 @@ import {
 	UnauthorizedException,
 	UseGuards,
 } from '@nestjs/common';
-import type { RequestUser } from '@kaizen/utils';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import { ForbiddenError } from '../../../shared/errors/forbidden.error';
 import { IdentifierUserGuard } from '../../../shared/guards/identifier-user.guard';
 import { ZodValidationPipe } from '../../../shared/pipes/zod-validation.pipe';
 import {
-	REQUEST_CODE_USE_CASE,
 	type IRequestCodeUseCase,
+	REQUEST_CODE_USE_CASE,
 } from '../../application/use-cases/request-code.use-case';
 import {
-	SIGN_UP_USE_CASE,
 	type ISignUpUseCase,
+	SIGN_UP_USE_CASE,
 } from '../../application/use-cases/sign-up.use-case';
 import {
-	VERIFY_CODE_USE_CASE,
 	type IVerifyCodeUseCase,
+	VERIFY_CODE_USE_CASE,
 } from '../../application/use-cases/verify-code.use-case';
 import { CodeAlreadyUsedError } from '../../domain/errors/code-already-used.error';
 import { CodeExpiredError } from '../../domain/errors/code-expired.error';
@@ -32,9 +32,12 @@ import { EmailAlreadyExistsError } from '../../domain/errors/email-already-exist
 import { InvalidCodeError } from '../../domain/errors/invalid-code.error';
 import { PhoneAlreadyExistsError } from '../../domain/errors/phone-already-exists.error';
 import { UnauthorizedError } from '../../domain/errors/unauthorized.error';
-import { RequestCodeSchema, type RequestCodeDto } from '../dtos/request-code.dto';
-import { SignUpSchema, type SignUpDto } from '../dtos/sign-up.dto';
-import { VerifyCodeSchema, type VerifyCodeDto } from '../dtos/verify-code.dto';
+import {
+	type RequestCodeDto,
+	RequestCodeSchema,
+} from '../dtos/request-code.dto';
+import { type SignUpDto, SignUpSchema } from '../dtos/sign-up.dto';
+import { type VerifyCodeDto, VerifyCodeSchema } from '../dtos/verify-code.dto';
 
 @Controller('auth')
 export class AuthController {

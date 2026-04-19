@@ -1,6 +1,6 @@
+import { AppFeature, hasFeature } from '@kaizen/utils';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AppFeature, hasFeature } from '@kaizen/utils';
 import { CodeAlreadyUsedError } from '../../domain/errors/code-already-used.error';
 import { CodeExpiredError } from '../../domain/errors/code-expired.error';
 import { InvalidCodeError } from '../../domain/errors/invalid-code.error';
@@ -10,10 +10,14 @@ import {
 	type IAuthCodeRepository,
 } from '../../domain/repositories/auth-code.repository.interface';
 import {
-	OTP_SERVICE,
 	type IOtpService,
+	OTP_SERVICE,
 } from '../../domain/services/otp.service.interface';
-import type { IVerifyCodeUseCase, VerifyCodeInput, VerifyCodeOutput } from './verify-code.use-case';
+import type {
+	IVerifyCodeUseCase,
+	VerifyCodeInput,
+	VerifyCodeOutput,
+} from './verify-code.use-case';
 
 @Injectable()
 export class VerifyCodeUseCaseImpl implements IVerifyCodeUseCase {
