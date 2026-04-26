@@ -26,6 +26,9 @@ export class UserRecord {
 
 	@Prop({ type: [String], enum: Object.values(AppFeature), default: [] })
 	features: AppFeature[];
+
+	@Prop({ default: null, type: String, sparse: true })
+	telegramId: string | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserRecord);

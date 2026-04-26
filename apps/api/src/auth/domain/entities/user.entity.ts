@@ -9,5 +9,6 @@ export class User {
 		public readonly modules: AppModule[],
 		public readonly features: AppFeature[],
 		public readonly createdAt: Date,
+		public readonly telegramId: string | null = null,
 	) {}
 }

@@ -28,9 +28,21 @@ export class MongooseFixedExpenseRepository implements IFixedExpenseRepository {
 		return doc ? this.toEntity(doc) : null;
 	}
 
-	async findActiveByUserId(userId: string): Promise<FixedExpense[]> {
-		const docs = await this.model.find({ userId, isActive: true });
+	async findActiveByUserId(
+		userId: string,
+		month: string,
+	): Promise<FixedExpense[]> {
+		const [year, monthNum] = month.split('-').map(Number);
+		const startOfNextMonth = new Date(Date.UTC(year, monthNum, 1));
+		const docs = await this.model.find({
+			userId,
+			$or: [{ deletedAt: null }, { deletedAt: { $gte: startOfNextMonth } }],
+		});
 		return docs.map((doc) => this.toEntity(doc));
+	}
+
+	async deactivate(id: string, date: Date): Promise<void> {
+		await this.model.updateOne({ _id: id }, { $set: { deletedAt: date } });
 	}
 
 	private toEntity(doc: FixedExpenseDocument): FixedExpense {
@@ -38,7 +50,7 @@ export class MongooseFixedExpenseRepository implements IFixedExpenseRepository {
 			doc._id.toString(),
 			doc.userId,
 			doc.name,
-			doc.isActive,
+			doc.deletedAt ?? null,
 			doc.createdAt,
 		);
 	}

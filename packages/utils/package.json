@@ -1,15 +1,26 @@
 {
-	"name": "@kaizen/utils",
-	"version": "0.0.1",
-	"description": "Shared types and utilities for Kaizen apps",
-	"main": "src/index.ts",
-	"types": "src/index.ts",
-	"scripts": {
-		"lint": "biome check --write .",
-		"format": "biome format --write ."
-	},
-	"devDependencies": {
-		"@biomejs/biome": "2.4.12",
-		"typescript": "^5.7.3"
-	}
+  "name": "@kaizen/utils",
+  "version": "0.0.1",
+  "description": "Shared types and utilities for Kaizen apps",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check --write .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.12",
+    "typescript": "^5.7.3"
+  }
 }

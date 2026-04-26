@@ -10,5 +10,6 @@ export interface CreateFixedIncomeData {
 export interface IFixedIncomeRepository {
 	save(data: CreateFixedIncomeData): Promise<FixedIncome>;
 	findById(id: string): Promise<FixedIncome | null>;
-	findActiveByUserId(userId: string): Promise<FixedIncome[]>;
+	findActiveByUserId(userId: string, month: string): Promise<FixedIncome[]>;
+	deactivate(id: string, date: Date): Promise<void>;
 }

@@ -42,6 +42,14 @@ import {
 	type IDeleteVariableIncomeUseCase,
 } from '../../application/use-cases/delete-variable-income.use-case';
 import {
+	DELETE_FIXED_EXPENSE_USE_CASE,
+	type IDeleteFixedExpenseUseCase,
+} from '../../application/use-cases/delete-fixed-expense/delete-fixed-expense.use-case';
+import {
+	DELETE_FIXED_INCOME_USE_CASE,
+	type IDeleteFixedIncomeUseCase,
+} from '../../application/use-cases/delete-fixed-income/delete-fixed-income.use-case';
+import {
 	GET_FINANCE_SUMMARY_USE_CASE,
 	type IGetFinanceSummaryUseCase,
 } from '../../application/use-cases/get-finance-summary.use-case';
@@ -111,6 +119,8 @@ export class FinancialController {
 		private readonly listVariableExpensesUseCase: IListVariableExpensesUseCase,
 		@Inject(DELETE_VARIABLE_EXPENSE_USE_CASE)
 		private readonly deleteVariableExpenseUseCase: IDeleteVariableExpenseUseCase,
+		@Inject(DELETE_FIXED_EXPENSE_USE_CASE)
+		private readonly deleteFixedExpenseUseCase: IDeleteFixedExpenseUseCase,
 		@Inject(CREATE_FIXED_INCOME_USE_CASE)
 		private readonly createFixedIncomeUseCase: ICreateFixedIncomeUseCase,
 		@Inject(UPDATE_FIXED_INCOME_AMOUNT_USE_CASE)
@@ -123,6 +133,8 @@ export class FinancialController {
 		private readonly listVariableIncomesUseCase: IListVariableIncomesUseCase,
 		@Inject(DELETE_VARIABLE_INCOME_USE_CASE)
 		private readonly deleteVariableIncomeUseCase: IDeleteVariableIncomeUseCase,
+		@Inject(DELETE_FIXED_INCOME_USE_CASE)
+		private readonly deleteFixedIncomeUseCase: IDeleteFixedIncomeUseCase,
 		@Inject(GET_FINANCE_SUMMARY_USE_CASE)
 		private readonly getFinanceSummaryUseCase: IGetFinanceSummaryUseCase,
 		@Inject(RECALCULATE_SUMMARY_USE_CASE)
@@ -223,10 +235,19 @@ export class FinancialController {
 		@Param('id') id: string,
 	) {
 		try {
-			await this.deleteVariableExpenseUseCase.execute({ user, id });
+			try {
+				await this.deleteVariableExpenseUseCase.execute({ user, id });
+				return;
+			} catch (e) {
+				if (!(e instanceof VariableExpenseNotFoundError)) throw e;
+			}
+			await this.deleteFixedExpenseUseCase.execute({ user, id });
 		} catch (error) {
 			if (error instanceof ForbiddenError) throw new ForbiddenException();
-			if (error instanceof VariableExpenseNotFoundError)
+			if (
+				error instanceof VariableExpenseNotFoundError ||
+				error instanceof FixedExpenseNotFoundError
+			)
 				throw new NotFoundException(error.message);
 			throw error;
 		}
@@ -326,10 +347,19 @@ export class FinancialController {
 		@Param('id') id: string,
 	) {
 		try {
-			await this.deleteVariableIncomeUseCase.execute({ user, id });
+			try {
+				await this.deleteVariableIncomeUseCase.execute({ user, id });
+				return;
+			} catch (e) {
+				if (!(e instanceof VariableIncomeNotFoundError)) throw e;
+			}
+			await this.deleteFixedIncomeUseCase.execute({ user, id });
 		} catch (error) {
 			if (error instanceof ForbiddenError) throw new ForbiddenException();
-			if (error instanceof VariableIncomeNotFoundError)
+			if (
+				error instanceof VariableIncomeNotFoundError ||
+				error instanceof FixedIncomeNotFoundError
+			)
 				throw new NotFoundException(error.message);
 			throw error;
 		}

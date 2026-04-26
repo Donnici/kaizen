@@ -47,6 +47,23 @@ Toda request possui um `RequestUser` injetado pelo `AuthGuard` global:
 
 Use `@CurrentUser()` nos controllers para acessar o usuário da request.
 
+## Estrutura de use-cases
+
+Cada use-case vive em sua própria subpasta dentro de `application/use-cases/`. A pasta tem o mesmo nome do use-case e contém dois arquivos:
+
+```
+application/
+  use-cases/
+    create-fixed-expense/
+      create-fixed-expense.use-case.ts       # interface + symbol
+      create-fixed-expense.use-case.impl.ts  # implementação
+    delete-fixed-expense/
+      delete-fixed-expense.use-case.ts
+      delete-fixed-expense.use-case.impl.ts
+```
+
+Nunca crie arquivos de use-case soltos diretamente em `use-cases/`. Sempre crie a pasta primeiro.
+
 ## Validação de body
 
 Use `ZodValidationPipe` com um schema Zod por endpoint. Em caso de falha lança `BodyValidationError` (422) e emite `Logger.debug` com o payload e os erros.

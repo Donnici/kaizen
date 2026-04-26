@@ -65,8 +65,8 @@ export class RecalculateSummaryUseCaseImpl
 			variableExpenses,
 			variableIncomes,
 		] = await Promise.all([
-			this.fixedExpenseRepo.findActiveByUserId(userId),
-			this.fixedIncomeRepo.findActiveByUserId(userId),
+			this.fixedExpenseRepo.findActiveByUserId(userId, fromMonth),
+			this.fixedIncomeRepo.findActiveByUserId(userId, fromMonth),
 			this.summaryRepo.findByUserAndMonth(userId, shiftMonth(fromMonth, -1)),
 			this.variableExpenseRepo.findByMonthRange(
 				userId,
@@ -139,6 +139,8 @@ export class RecalculateSummaryUseCaseImpl
 		while (month <= computeUntil) {
 			const totalExpenses =
 				fixedExpenses.reduce((sum, expense) => {
+					if (expense.deletedAt && this.toYearMonth(expense.deletedAt) <= month)
+						return sum;
 					const revisions = revisionsByExpenseId.get(expense.id) ?? [];
 					const latest = this.findLatestRevisionForMonth(revisions, month);
 					return latest ? sum + latest.amount : sum;
@@ -146,6 +148,8 @@ export class RecalculateSummaryUseCaseImpl
 
 			const totalIncomes =
 				fixedIncomes.reduce((sum, income) => {
+					if (income.deletedAt && this.toYearMonth(income.deletedAt) <= month)
+						return sum;
 					const revisions = revisionsByIncomeId.get(income.id) ?? [];
 					const latest = this.findLatestRevisionForMonth(revisions, month);
 					return latest ? sum + latest.amount : sum;
@@ -168,6 +172,10 @@ export class RecalculateSummaryUseCaseImpl
 		}
 
 		await this.summaryRepo.upsertMany(summaries);
+	}
+
+	private toYearMonth(date: Date): string {
+		return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
 	}
 
 	private findLatestRevisionForMonth(

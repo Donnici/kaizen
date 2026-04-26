@@ -1,12 +1,14 @@
 {
-	"compilerOptions": {
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"target": "ES2023",
-		"strict": true,
-		"declaration": true,
-		"skipLibCheck": true,
-		"outDir": "dist"
-	},
-	"include": ["src/**/*"]
+    "compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "target": "ES2023",
+        "strict": true,
+        "declaration": true,
+        "skipLibCheck": true,
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["src/**/*"]
 }

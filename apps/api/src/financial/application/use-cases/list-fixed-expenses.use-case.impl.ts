@@ -36,6 +36,7 @@ export class ListFixedExpensesUseCaseImpl implements IListFixedExpensesUseCase {
 		const month = input.month ?? getCurrentMonth();
 		const expenses = await this.fixedExpenseRepository.findActiveByUserId(
 			input.user.id,
+			month,
 		);
 
 		const result: FixedExpenseItem[] = [];

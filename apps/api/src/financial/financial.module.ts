@@ -12,6 +12,10 @@ import { DELETE_VARIABLE_EXPENSE_USE_CASE } from './application/use-cases/delete
 import { DeleteVariableExpenseUseCaseImpl } from './application/use-cases/delete-variable-expense.use-case.impl';
 import { DELETE_VARIABLE_INCOME_USE_CASE } from './application/use-cases/delete-variable-income.use-case';
 import { DeleteVariableIncomeUseCaseImpl } from './application/use-cases/delete-variable-income.use-case.impl';
+import { DELETE_FIXED_EXPENSE_USE_CASE } from './application/use-cases/delete-fixed-expense/delete-fixed-expense.use-case';
+import { DeleteFixedExpenseUseCaseImpl } from './application/use-cases/delete-fixed-expense/delete-fixed-expense.use-case.impl';
+import { DELETE_FIXED_INCOME_USE_CASE } from './application/use-cases/delete-fixed-income/delete-fixed-income.use-case';
+import { DeleteFixedIncomeUseCaseImpl } from './application/use-cases/delete-fixed-income/delete-fixed-income.use-case.impl';
 import { GET_FINANCE_SUMMARY_USE_CASE } from './application/use-cases/get-finance-summary.use-case';
 import { GetFinanceSummaryUseCaseImpl } from './application/use-cases/get-finance-summary.use-case.impl';
 import { LIST_FIXED_EXPENSES_USE_CASE } from './application/use-cases/list-fixed-expenses.use-case';
@@ -145,6 +149,10 @@ import { FinancialController } from './presentation/controllers/financial.contro
 			useClass: DeleteVariableExpenseUseCaseImpl,
 		},
 		{
+			provide: DELETE_FIXED_EXPENSE_USE_CASE,
+			useClass: DeleteFixedExpenseUseCaseImpl,
+		},
+		{
 			provide: CREATE_FIXED_INCOME_USE_CASE,
 			useClass: CreateFixedIncomeUseCaseImpl,
 		},
@@ -167,6 +175,10 @@ import { FinancialController } from './presentation/controllers/financial.contro
 		{
 			provide: DELETE_VARIABLE_INCOME_USE_CASE,
 			useClass: DeleteVariableIncomeUseCaseImpl,
+		},
+		{
+			provide: DELETE_FIXED_INCOME_USE_CASE,
+			useClass: DeleteFixedIncomeUseCaseImpl,
 		},
 		{
 			provide: RECALCULATE_SUMMARY_USE_CASE,

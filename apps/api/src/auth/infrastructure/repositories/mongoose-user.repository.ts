@@ -25,6 +25,18 @@ export class MongooseUserRepository implements IUserRepository {
 		return doc ? this.toEntity(doc) : null;
 	}
 
+	async findByTelegramId(telegramId: string): Promise<User | null> {
+		const doc = await this.userModel.findOne({ telegramId });
+		return doc ? this.toEntity(doc) : null;
+	}
+
+	async updateTelegramId(userId: string, telegramId: string): Promise<void> {
+		await this.userModel.updateOne(
+			{ _id: userId },
+			{ $set: { telegramId } },
+		);
+	}
+
 	async save(data: CreateUserData): Promise<User> {
 		const doc = await this.userModel.create({
 			name: data.name,
@@ -45,6 +57,7 @@ export class MongooseUserRepository implements IUserRepository {
 			doc.modules,
 			doc.features,
 			doc.createdAt,
+			doc.telegramId ?? null,
 		);
 	}
 }

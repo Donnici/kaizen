@@ -49,6 +49,7 @@ describe('Financial - Expenses (unified)', () => {
 		findOne: jest.fn(),
 		find: jest.fn(),
 		create: jest.fn(),
+		updateOne: jest.fn(),
 	};
 	const mockRevisionModel = {
 		findOne: jest.fn(),
@@ -498,7 +499,59 @@ describe('Financial - Expenses (unified)', () => {
 	});
 
 	describe('DELETE /finance/expenses/:id', () => {
-		describe('happy path (204)', () => {
+		describe('fixed expense — happy path (204)', () => {
+			it('should deactivate fixed expense owned by the user', async () => {
+				mockVariableExpenseModel.findOne.mockResolvedValueOnce(null);
+				mockExpenseModel.findOne.mockResolvedValueOnce(mockExpenseDoc);
+				mockExpenseModel.updateOne.mockResolvedValueOnce({ modifiedCount: 1 });
+
+				await request(app.getHttpServer())
+					.delete('/finance/expenses/expense-id-123')
+					.expect(204);
+
+				expect(mockExpenseModel.updateOne).toHaveBeenCalledWith(
+					{ _id: 'expense-id-123' },
+					{ $set: { deletedAt: expect.any(Date) } },
+				);
+			});
+		});
+
+		describe('fixed expense — not found (404)', () => {
+			it('should return 404 when fixed expense does not exist', async () => {
+				mockVariableExpenseModel.findOne.mockResolvedValueOnce(null);
+				mockExpenseModel.findOne.mockResolvedValueOnce(null);
+
+				const response = await request(app.getHttpServer())
+					.delete('/finance/expenses/nonexistent-id')
+					.expect(404);
+
+				expect(response.body.statusCode).toBe(404);
+			});
+		});
+
+		describe('fixed expense — permissions (403)', () => {
+			it('should reject when fixed expense belongs to a different user', async () => {
+				const guardSpy = jest
+					.spyOn(mockGuard, 'canActivate')
+					.mockImplementationOnce((ctx: ExecutionContext) => {
+						ctx.switchToHttp().getRequest<{ user: AuthenticatedUser }>().user =
+							{ ...mockUser, id: 'other-user-id' };
+						return true;
+					});
+
+				mockVariableExpenseModel.findOne.mockResolvedValueOnce(null);
+				mockExpenseModel.findOne.mockResolvedValueOnce(mockExpenseDoc);
+
+				const response = await request(app.getHttpServer())
+					.delete('/finance/expenses/expense-id-123')
+					.expect(403);
+
+				expect(response.body.statusCode).toBe(403);
+				guardSpy.mockRestore();
+			});
+		});
+
+		describe('variable expense — happy path (204)', () => {
 			it('should delete variable expense owned by the user', async () => {
 				mockVariableExpenseModel.findOne.mockResolvedValueOnce(
 					mockVariableExpenseDoc,
@@ -517,7 +570,7 @@ describe('Financial - Expenses (unified)', () => {
 			});
 		});
 
-		describe('not found (404)', () => {
+		describe('variable expense — not found (404)', () => {
 			it('should return 404 when variable expense does not exist', async () => {
 				mockVariableExpenseModel.findOne.mockResolvedValueOnce(null);
 
@@ -529,7 +582,7 @@ describe('Financial - Expenses (unified)', () => {
 			});
 		});
 
-		describe('permissions (403)', () => {
+		describe('variable expense — permissions (403)', () => {
 			it('should reject when variable expense belongs to a different user', async () => {
 				const guardSpy = jest
 					.spyOn(mockGuard, 'canActivate')

@@ -65,6 +65,7 @@ describe('Financial - Incomes (unified)', () => {
 		findOne: jest.fn(),
 		find: jest.fn(),
 		create: jest.fn(),
+		updateOne: jest.fn(),
 	};
 	const mockIncomeRevisionModel = {
 		findOne: jest.fn(),
@@ -440,7 +441,59 @@ describe('Financial - Incomes (unified)', () => {
 	});
 
 	describe('DELETE /finance/incomes/:id', () => {
-		describe('happy path (204)', () => {
+		describe('fixed income — happy path (204)', () => {
+			it('should deactivate fixed income owned by the user', async () => {
+				mockVariableIncomeModel.findOne.mockResolvedValueOnce(null);
+				mockFixedIncomeModel.findOne.mockResolvedValueOnce(mockIncomeDoc);
+				mockFixedIncomeModel.updateOne.mockResolvedValueOnce({ modifiedCount: 1 });
+
+				await request(app.getHttpServer())
+					.delete('/finance/incomes/income-id-123')
+					.expect(204);
+
+				expect(mockFixedIncomeModel.updateOne).toHaveBeenCalledWith(
+					{ _id: 'income-id-123' },
+					{ $set: { deletedAt: expect.any(Date) } },
+				);
+			});
+		});
+
+		describe('fixed income — not found (404)', () => {
+			it('should return 404 when fixed income does not exist', async () => {
+				mockVariableIncomeModel.findOne.mockResolvedValueOnce(null);
+				mockFixedIncomeModel.findOne.mockResolvedValueOnce(null);
+
+				const response = await request(app.getHttpServer())
+					.delete('/finance/incomes/nonexistent-id')
+					.expect(404);
+
+				expect(response.body.statusCode).toBe(404);
+			});
+		});
+
+		describe('fixed income — permissions (403)', () => {
+			it('should reject when fixed income belongs to a different user', async () => {
+				const guardSpy = jest
+					.spyOn(mockGuard, 'canActivate')
+					.mockImplementationOnce((ctx: ExecutionContext) => {
+						ctx.switchToHttp().getRequest<{ user: AuthenticatedUser }>().user =
+							{ ...mockUser, id: 'other-user-id' };
+						return true;
+					});
+
+				mockVariableIncomeModel.findOne.mockResolvedValueOnce(null);
+				mockFixedIncomeModel.findOne.mockResolvedValueOnce(mockIncomeDoc);
+
+				const response = await request(app.getHttpServer())
+					.delete('/finance/incomes/income-id-123')
+					.expect(403);
+
+				expect(response.body.statusCode).toBe(403);
+				guardSpy.mockRestore();
+			});
+		});
+
+		describe('variable income — happy path (204)', () => {
 			it('should delete variable income owned by the user', async () => {
 				mockVariableIncomeModel.findOne.mockResolvedValueOnce(
 					mockVariableIncomeDoc,
@@ -459,7 +512,7 @@ describe('Financial - Incomes (unified)', () => {
 			});
 		});
 
-		describe('not found (404)', () => {
+		describe('variable income — not found (404)', () => {
 			it('should return 404 when variable income does not exist', async () => {
 				mockVariableIncomeModel.findOne.mockResolvedValueOnce(null);
 
@@ -471,7 +524,7 @@ describe('Financial - Incomes (unified)', () => {
 			});
 		});
 
-		describe('permissions (403)', () => {
+		describe('variable income — permissions (403)', () => {
 			it('should reject when variable income belongs to a different user', async () => {
 				const guardSpy = jest
 					.spyOn(mockGuard, 'canActivate')

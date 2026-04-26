@@ -7,18 +7,21 @@ import { AuthModule } from './auth/auth.module';
 import { FinancialModule } from './financial/financial.module';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({ isGlobal: true }),
-		MongooseModule.forRootAsync({
-			inject: [ConfigService],
-			useFactory: (config: ConfigService) => ({
-				uri: config.getOrThrow<string>('MONGODB_URI'),
-			}),
-		}),
-		AuthModule,
-		FinancialModule,
-	],
-	controllers: [AppController],
-	providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: ['.env.local', '.env']
+        }),
+        MongooseModule.forRootAsync({
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                uri: config.getOrThrow<string>('MONGODB_URI'),
+            }),
+        }),
+        AuthModule,
+        FinancialModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -17,8 +17,8 @@ export class FixedIncomeRecord {
 	@Prop({ required: true })
 	name: string;
 
-	@Prop({ default: true })
-	isActive: boolean;
+	@Prop({ default: null, type: Date })
+	deletedAt: Date | null;
 }
 
 export const FixedIncomeSchema =

@@ -36,6 +36,7 @@ export class ListFixedIncomesUseCaseImpl implements IListFixedIncomesUseCase {
 		const month = input.month ?? getCurrentMonth();
 		const incomes = await this.fixedIncomeRepository.findActiveByUserId(
 			input.user.id,
+			month,
 		);
 
 		const result: FixedIncomeItem[] = [];

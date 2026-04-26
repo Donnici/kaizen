@@ -15,7 +15,7 @@ export class FixedIncomeRevisionRecord {
 	@Prop({ required: true })
 	fixedIncomeId: string;
 
-	@Prop({ required: true })
+	@Prop({ required: true, type: Number })
 	amount: number;
 
 	@Prop({ required: true })

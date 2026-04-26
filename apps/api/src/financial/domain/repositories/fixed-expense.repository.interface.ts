@@ -10,5 +10,6 @@ export interface CreateFixedExpenseData {
 export interface IFixedExpenseRepository {
 	save(data: CreateFixedExpenseData): Promise<FixedExpense>;
 	findById(id: string): Promise<FixedExpense | null>;
-	findActiveByUserId(userId: string): Promise<FixedExpense[]>;
+	findActiveByUserId(userId: string, month: string): Promise<FixedExpense[]>;
+	deactivate(id: string, date: Date): Promise<void>;
 }

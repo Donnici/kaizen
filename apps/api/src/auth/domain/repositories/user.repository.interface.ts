@@ -14,5 +14,7 @@ export interface CreateUserData {
 export interface IUserRepository {
 	findByEmail(email: string): Promise<User | null>;
 	findByPhone(phone: string): Promise<User | null>;
+	findByTelegramId(telegramId: string): Promise<User | null>;
 	save(data: CreateUserData): Promise<User>;
+	updateTelegramId(userId: string, telegramId: string): Promise<void>;
 }

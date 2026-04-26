@@ -11,4 +11,5 @@ export enum AppFeature {
 	FINANCIAL_VARIABLE_INCOME_READ = 'financial:variable-income:read',
 	FINANCIAL_VARIABLE_INCOME_WRITE = 'financial:variable-income:write',
 	FINANCIAL_SUMMARY_READ = 'financial:summary:read',
+	TELEGRAM_LINK = 'telegram:link',
 }
